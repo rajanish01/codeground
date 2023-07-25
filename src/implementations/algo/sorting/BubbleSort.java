@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class BubbleSort {
 
-    public static void bubbleSort(int[] array) {
+    private static void bubbleSort(int[] array) {
         int n = array.length;
         if (n <= 1) return;
         boolean swapped;
