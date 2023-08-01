@@ -1,10 +1,11 @@
 package implementations.ds;
 
-public class LinkedList {
+public class DoublyLinkedList {
 
     public static class Node {
         private int val;
         private Node next;
+        private Node prev;
 
         public Node() {
         }
@@ -24,93 +25,81 @@ public class LinkedList {
                 itr = itr.next;
             }
             itr.next = newNode;
+            newNode.prev = itr;
         }
         print(head);
         return head;
     }
 
     public static Node insertAtIndex(Node head, int val, int index) {
-        if (head == null) {
-            return insert(null, val);
-        }
+        if (head == null) return insert(null, val);
         Node newNode = new Node(val);
         if (index == 0) {
             newNode.next = head;
+            head.prev = newNode;
             head = newNode;
         } else {
             Node itr = head;
             while (index > 1) {
                 if (itr.next == null) {
-                    System.out.println("Can't insert at given index !");
+                    System.out.println("Can't Insert at Given Index !");
                     return head;
                 }
                 itr = itr.next;
                 index--;
             }
-            if (itr.next != null) {
+            if (itr.next == null) {
+                itr.next = newNode;
+                newNode.prev = itr;
+            } else {
                 newNode.next = itr.next;
+                newNode.prev = itr;
+                itr.next.prev = newNode;
+                itr.next = newNode;
             }
-            itr.next = newNode;
         }
         return head;
     }
 
     public static Node deleteAtIndex(Node head, int index) {
         if (head == null) {
-            System.out.println("Linked List Is Empty !");
+            System.out.println("List is Empty !");
             return null;
-        }
-        if (index == 0) {
+        } else if (index == 0) {
             head = head.next;
+            head.prev.next = null;
+            head.prev = null;
         } else {
             Node itr = head;
-            while (index > 1) {
+            while (index > 0) {
                 itr = itr.next;
+                if (itr == null) {
+                    System.out.println("Can't Delete Given Index !");
+                    return head;
+                }
                 index--;
             }
-            if (itr.next.next == null) {
-                itr.next = null;
+            if (itr.next == null) {
+                itr.prev.next = null;
+                itr.prev = null;
             } else {
-                itr.next = itr.next.next;
+                itr.prev.next = itr.next;
+                itr.next.prev = itr.prev;
             }
-        }
-        return head;
-    }
-
-    public static Node reverse(Node head) {
-        if (head == null) {
-            System.out.println("Linked List Empty !");
-            return null;
-        } else {
-            Node prev = head;
-            Node curr = prev.next;
-            prev.next = null;
-            head = curr;
-            while (head.next != null) {
-                head = head.next;
-                curr.next = prev;
-                prev = curr;
-                curr = head;
-            }
-            head.next = prev;
         }
         return head;
     }
 
     public static Node rotate(Node head) {
-        if (head == null) {
-            System.out.println("Linked List Empty !");
-            return null;
-        } else {
-            Node itr = head;
-            while (itr.next.next != null) {
-                itr = itr.next;
-            }
-            Node last = itr.next;
-            itr.next = null;
-            last.next = head;
-            head = last;
+        Node itr = head;
+        while (itr.next != null) {
+            itr = itr.next;
         }
+        itr.prev.next = null;
+        itr.prev = null;
+        itr.next = head;
+        head.prev = itr;
+        head = itr;
         return head;
     }
 
@@ -140,8 +129,6 @@ public class LinkedList {
         head = insertAtIndex(head, 9, 7);
         print(head);
         head = deleteAtIndex(head, 7);
-        print(head);
-        head = reverse(head);
         print(head);
         head = rotate(head);
         print(head);
