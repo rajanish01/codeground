@@ -44,6 +44,7 @@ public class ThreadMethods {
         counter.setDaemon(true);    //Main thread stops counter thread just after its exits.
         counter.start();
         counter.join();     //Makes Main thread wait until counter thread is running.
+
     }
 
 }
