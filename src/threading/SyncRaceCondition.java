@@ -1,17 +1,15 @@
 package threading;
 
-public class RaceCondition {
+public class SyncRaceCondition {
 
     private static int count = 0;
-
-    /*
-        Below method should count till 200000, but not works because of race condition.
-     */
 
     public static void main(String[] args) throws InterruptedException {
         Runnable runnable = () -> {
             for (int i = 0; i < 1_00_000; i++) {
-                count++;
+                synchronized (SyncRaceCondition.class) {
+                    count++;
+                }
             }
             System.out.println(Thread.currentThread().getName() + " " + count);
         };
